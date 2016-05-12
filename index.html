@@ -74,7 +74,7 @@
 				
 				       this.setState(
 		             {
-					    actualAge: actualAgeFun,
+					    
 						estiloError: 'visibleError',
 						estilo: 'invisible'
 				
@@ -105,14 +105,15 @@
                     }
 					
 					if((((birthYear%100)!=0)&&((birthYear%4)==0))||((birthYear%400)==0)){
+					console.log('Año bisiesto');
 					  bisiesto = true;
 					}
 					
 					if(birthMonth = 2 && birthDay > 29 && bisiesto){
-					
+					console.log('Año bisiesto y dia mayor de 29');
 					 this.setState(
 		             {
-					    actualAge: actualAgeFun,
+					   
 						estiloError: 'visibleError',
 						estilo: 'invisible'
 				
@@ -124,25 +125,27 @@
 					}
 					
 					if(birthMonth = 2 && birthDay > 28 && !bisiesto){
-					
+						console.log('Año no bisisesto datos incorrectos dia mayor de 28');
 					 this.setState(
 		             {
-					    actualAge: actualAgeFun,
+					    
 						estiloError: 'visibleError',
 						estilo: 'invisible'
 				
 				
 				
 			         });
+					 
+					 
 				     return false;
 					
 					}
 		
 		         var actualAgeFun = actualYear - birthYear;
-		
-		           if ((actualMonth < birthMonth) || (actualMonth == birthMonth && actualDay < birthDay)) {
-		
-		               actualAgeFun--;
+				 
+		           if ((actualMonth > birthMonth) || (actualMonth == birthMonth && actualDay < birthDay)) {
+		               console.log('Todavia no es mi cumpleaños');
+		                actualAgeFun--;
 		            }
 		
 								this.setState(
