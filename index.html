@@ -1,8 +1,31 @@
 <html>
 <head>
+<meta charset="utf-8" />
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/react/15.0.1/react.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/react/15.0.1/react-dom.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/babel-core/5.8.23/browser.min.js"></script>
+	<style media="screen">
+		#visualAge.visible{
+			visibility: visible;
+			
+			font-size: large;
+		}
+		
+		#visualError.visibleError{
+			visibility: visible;
+			font-size: large;
+			color: red;
+		}
+		
+		#visualError.invisible {
+			visibility: hidden;
+			display: none;
+		}
+		#visualAge.invisible {
+			visibility: hidden;
+			display: none;
+		}
+	</style>
 </head>
 
 <body>
@@ -11,9 +34,145 @@
 	<div id="container"></div>
 	
 	<script type="text/babel">
+		var ObtenerEdad = React.createClass({
+			
+			 componentDidMount: function() {
+				console.log('se llama despues del render');
+				
+			 },
+			 componentWillMount: function() {
+				console.log('se llama en segunda instancia');
+			 },
+			
+			 getInitialState: function () {
+				console.log('se llama en primera instancia');
+
+				return {
+					descriptionTag: 'Fecha Nacimiento',
+					age: '',
+					actualAge: '',
+					estilo: 'invisible',
+					estiloError: 'invisible',
+					error: 'No has introducido edad'
+					
+				};
+			},
+			
+			 setAge: function(birthDate){
+				this.setState(
+				     {
+					    age: birthDate.target.value
+					 });
+				
+			 },
+			
+			getAge: function(){
+				   console.log('obtenemos la edad ' );
+				
+				   if(!this.state.age || this.state.age.length < 10 ){ 
+				        console.log('No hay edad');
+				
+				       this.setState(
+		             {
+					    actualAge: actualAgeFun,
+						estiloError: 'visibleError',
+						estilo: 'invisible'
+				
+				
+				
+			         });
+				     return false;
+				 }
+				
+				var actualDate = new Date();
+				var actualDay = actualDate.getDate();
+				var actualMonth = actualDate.getMonth() + 1;
+				var actualYear = actualDate.getFullYear();
+		        var bisiesto = false;
+		
+		        var birthDate = this.state.age.toString().split('/');
+		
+		        var birthDay = birthDate[0];
+		        var birthMonth = birthDate[1];
+                var birthYear = birthDate[2];
+		
+		            if (birthMonth.substr(0,1) == 0) {
+                         birthMonth= birthMonth.substring(1, 2);
+                    }
+		
+		            if (birthDay.substr(0, 1) == 0) {
+                    birthDay = birthDay.substring(1, 2);
+                    }
+					
+					if((((birthYear%100)!=0)&&((birthYear%4)==0))||((birthYear%400)==0)){
+					  bisiesto = true;
+					}
+					
+					if(birthMonth = 2 && birthDay > 29 && bisiesto){
+					
+					 this.setState(
+		             {
+					    actualAge: actualAgeFun,
+						estiloError: 'visibleError',
+						estilo: 'invisible'
+				
+				
+				
+			         });
+				     return false;
+					
+					}
+					
+					if(birthMonth = 2 && birthDay > 28 && !bisiesto){
+					
+					 this.setState(
+		             {
+					    actualAge: actualAgeFun,
+						estiloError: 'visibleError',
+						estilo: 'invisible'
+				
+				
+				
+			         });
+				     return false;
+					
+					}
+		
+		         var actualAgeFun = actualYear - birthYear;
+		
+		           if ((actualMonth < birthMonth) || (actualMonth == birthMonth && actualDay < birthDay)) {
+		
+		               actualAgeFun--;
+		            }
+		
+								this.setState(
+								{
+									actualAge: actualAgeFun,
+									estilo: 'visible',
+									estiloError: 'invisible'				
+								});
+		
+		
+				
+		},
+			
+			
+			render: function(){
+				console.log('render');
+				return (
+					<div>
+						<h3>Introduce tu edad dd/mm/yyyy</h3>
+						<input type="text" placeholder={this.state.descriptionTag} onChange={this.setAge}/>
+						<button onClick={this.getAge}>Que edad Tengo?</button>
+						<p id="visualAge" className={this.state.estilo}><span>Tienes: </span><span>{this.state.actualAge}</span><span> años.</span></p>
+						<p id="visualError" className={this.state.estiloError}><span>{this.state.error}.</span></p>
+					</div>
+				)
+			}
+		});
 
 		ReactDOM.render(
-			<h1>Hola mundo</h1>,
+			<ObtenerEdad/>,
 			document.getElementById('saludo')
 		);
 
